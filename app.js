@@ -1,11 +1,27 @@
-const {readFileSync, writeFileSync} = require('fs');
+const {readFile, writeFile} = require('fs');
 
-const first = readFileSync('./content/first.txt','utf8');
-const second = readFileSync('./content/second.txt','utf8');
+// callback - run when a method is done
+readFile('./content/first.txt','utf8', (err, result)=> {
+    if(err) {
+        return;
+    }
+    const first = result;
+    readFile('./content/second.txt', 'utf8',(err, result) => {
+        if(err) {
+            console.log(err)
+            return
+        }
+        const second = result
+        writeFile(
+            './content/result-async.txt',
+            `here is the result: ${first}, ${second}`,
+            (err, result) => {
+                if(err) {
+                    console.log(err)
+                    return
+                }
 
-console.log(first, second)
-writeFileSync(
-    './content/result-sync.txt',
-    `here is the result: ${first}, ${second}`,
-    {flag:'a'} // for appending
-)
+            console.log(result)
+            })
+    })
+})
